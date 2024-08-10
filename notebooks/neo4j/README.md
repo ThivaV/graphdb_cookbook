@@ -29,7 +29,7 @@
     MATCH (:Movie) RETURN n LIMIT 25;
     ```
 - Jupyter notebooks:
-    - [neo4j auradb notebook](./neo4j_auradb.ipynb)
+    - [neo4j auradb langchain groq notebook](./neo4j_auradb_langchain_groq.ipynb)
 
 - References:
     - [Colab Init neo4j auradb](https://colab.research.google.com/drive/1-jUyQOOVcg6H2Ohki0NSgcYp176ZAwjX?usp=sharing)
