@@ -1,0 +1,9 @@
+ipykernel
+ipywidgets
+tqdm
+pandas
+numpy
+matplotlib
+python-dotenv
+python-box
+gdown
