@@ -54,33 +54,73 @@
     - When the values are interconnected, you have a graph
     - Traversing a graph in a key-value store may involve writing complex code
 
-## Sample Cypher queries:
+## Cypher
 
-- Create <u>Person</u> `Nodes`:
+- What is Cypher?
 
-```
-CREATE(Peter:Person{name:'Peter Kim', born:1998, gender:'female'});
-CREATE(Robert:Person{name:'Robert Junior', born:1956, gender:'male'});
-CREATE(Iron:Person{name:'Iron Junior', born:1986, gender:'female'});
-```
+    * Cypher is a query language designed for graphs.
+    * Pattern's in Cypher
+        * Nodes are represented by parentheses `()`
+        * We use a colon to signify the label(s), for example `(:Person)`
+        * Relationships between nodes are written with two dashes, for example `(:Person)--(:Movie)`
+        * The direction of a relationship is indicated using a greater than or less than symbol `<` or `>` , for example `(:Person)-→(:Movie)`
+        * The type of the relationship is written using the square brackets between the two dashes: `[` and `]`, for example `[:ACTED_IN]`
+        * Properties drawn in a `speech bubble` are specified in a JSON like syntax.
+            * Properties in Neo4j are `key/value` pairs, for example `{name: 'Tom Hanks'}`
+    * `(m:Movie {title: 'Cloud Atlas'})<-[:ACTED_IN]-(p:Person)`
+        * The two node types in this pattern are `Movie` and `Person`. The `Person` nodes have a directed `ACTED_IN` relationship to `Movie` nodes. The specific `Movie` node in this pattern is filtered by the title property with a value of Cloud Atlas. So this pattern represents all people in the graph who acted in the movie, Cloud Atlas.
+    * Which Cypher clause do you use to read data from Neo4j?
+        * `MATCH`
+    * What Cypher keyword can you use to filter the nodes retrieved during the execution of a `MATCH` clause?
+        * `WHERE`
+        * We want to know what the tagline is for the movie, The Matrix: `MATCH (m:Movie) WHERE m.title = 'The Matrix' RETURN m.tagline`
+        * Find the year that Kevin Bacon was born: `MATCH (p:Person) WHERE p.name = 'Kevin Bacon' RETURN p.born`
 
-- Create <u>Movie</u> `Nodes`:
-```
-CREATE(Iron:Movie{title:'The Iron Man', release:2008});
-CREATE(Matrix:Movie{title:'The Matrix', release:1999});
-```
+- Cypher patterns:
 
-- Create `Relationships`:
-```
-MATCH (Peter:Person {name: "Peter Kim"})
-MATCH (Matrix:Movie {title: "The Matrix"})
-CREATE (Peter)-[:ACTED_IN]->(Matrix);
-```
+    * `MATCH (p:Person {name: 'Tom Hanks'})-[:ACTED_IN]->()`
+        * We can extend the pattern in the `MATCH` clause to traverse through all relationships with a type of `ACTED_IN` to any node. Our domain model shows that the `ACTED_IN` relationship goes in an outgoing direction from the Person node so we can add the direction in our pattern. We often refer to this as a `traversal`.
+    * `MATCH (p:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(m) RETURN m.title`
+        * Our data model dictates that the node at the other end of that relationship will be `Movie` node, so we don’t necessarily need to specify the `:Movie` label in the node - instead we will use the variable `m`.
+    * `MATCH (p:Person {name: 'Tom Hanks'})-[:ACTED_IN]->(m:Movie) RETURN m.title`
+        * This code returns the titles of all movies that Tom Hanks acted in.
+        If our graph had different labels, for example Television and Movie nodes this query would have returned all Television and Movie nodes that Tom Hanks acted in. That is, if we had multiple types of nodes at the end of the ACTED_IN relationships in our graph, we could make sure that we only return movies.
+    * `MATCH (m:Movie)<-[:ACTED_IN]-(p:Person) RETURN m.title, p.name`
+        * Started with the `Movie` node and list those who acted in the movie
+    * Which `MATCH` clauses will return the names of the directors of the movie, The Matrix?
+        * `MATCH (m:Movie {title: 'The Matrix'})<-[:DIRECTED]-(p:Person) RETURN p.name`
+        * `MATCH (m:Movie {title: 'The Matrix'})<-[:DIRECTED]-(p) RETURN p.name`
 
-- Retrieve <u>Movies</u>:
-```
-MATCH (:Movie) RETURN n LIMIT 25;
-```
+- Sample Cypher queries:
+
+    - Create <u>Person</u> `Nodes`:
+
+    ```
+    CREATE(Peter:Person{name:'Peter Kim', born:1998, gender:'female'});
+    CREATE(Robert:Person{name:'Robert Junior', born:1956, gender:'male'});
+    CREATE(Iron:Person{name:'Iron Junior', born:1986, gender:'female'});
+    ```
+
+    - Create <u>Movie</u> `Nodes`:
+
+    ```
+    CREATE(Iron:Movie{title:'The Iron Man', release:2008});
+    CREATE(Matrix:Movie{title:'The Matrix', release:1999});
+    ```
+
+    - Create `Relationships`:
+
+    ```
+    MATCH (Peter:Person {name: "Peter Kim"})
+    MATCH (Matrix:Movie {title: "The Matrix"})
+    CREATE (Peter)-[:ACTED_IN]->(Matrix);
+    ```
+
+    - Retrieve <u>Movies</u>:
+
+    ```
+    MATCH (:Movie) RETURN n LIMIT 25;
+    ```
 
 ## Jupyter notebooks:
 
