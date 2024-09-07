@@ -408,6 +408,10 @@
     CALL db.labels()
     ```
 
+## Graph Data Modeling Fundamentals
+
+
+
 ## Jupyter notebooks:
 
 - [neo4j auradb langchain groq notebook](./neo4j_auradb_langchain_groq.ipynb)
